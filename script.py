@@ -1,9 +1,7 @@
 import xmind
 from classes import UserStory, FuncRequirements
-import pathlib
+from pathlib import Path
 
-# Global variables
-path = "assets\\"
 
 def get_user_stories(feature):
     """
@@ -66,8 +64,15 @@ def get_func_reqs(feature):
         return reqs
 
 def generate_features(name, section_index=0):
+    # Load required Path
+    path_assets = Path.cwd().joinpath('assets')
+    path_input = path_assets.joinpath('input')
+    # Path(path_input).mkdir(exist_ok=True)
+    path_output = path_assets.joinpath('output')
+    Path(path_output).mkdir(exist_ok=True)
+    file_path = path_input.joinpath(name + '.xmind')
     # Load .xmind file
-    w = xmind.load(path + "{}.xmind".format(name))
+    w = xmind.load(file_path)
     # Load firt (primary sheet)
     sheet=w.getPrimarySheet()
     # Get root topic
@@ -75,8 +80,9 @@ def generate_features(name, section_index=0):
     # Get required section
     section = root.getSubTopicByIndex(section_index)
     # Create folder for a section to keep features
-    section_folder_path = path + section.getTitle()
-    pathlib.Path(section_folder_path).mkdir(exist_ok=True) 
+    section_name = section.getTitle()
+    section_folder_path = path_output.joinpath(section_name)
+    Path(section_folder_path).mkdir(exist_ok=True) 
     # Extract features and start iterating
     features = section.getSubTopics()
 
@@ -90,7 +96,7 @@ def generate_features(name, section_index=0):
         func_reqs = get_func_reqs(feature)
         output += str(func_reqs)
         # Write output in a file
-        with open(section_folder_path + '\\' + feature_name + ".txt", 'w') as f:
+        with open(section_folder_path.joinpath(feature_name + '.txt'), 'w') as f:
             f.write(output)
                   
 generate_features("srs")

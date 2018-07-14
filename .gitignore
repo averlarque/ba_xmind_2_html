@@ -60,4 +60,6 @@ docs/_build/
 target/
 
 # Project files
-assets/
+assets/output
+# assets/input/*.xmind
+.vscode/
