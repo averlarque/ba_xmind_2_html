@@ -65,12 +65,9 @@ def get_func_reqs(feature):
 
 def generate_features(name, section_index=0):
     # Load required Path
-    path_assets = Path.cwd().joinpath('assets')
-    path_input = path_assets.joinpath('input')
-    # Path(path_input).mkdir(exist_ok=True)
-    path_output = path_assets.joinpath('output')
+    path_output = Path.cwd().joinpath('output')
     Path(path_output).mkdir(exist_ok=True)
-    file_path = path_input.joinpath(name + '.xmind')
+    file_path = Path.cwd().joinpath(name + '.xmind')
     # Load .xmind file
     w = xmind.load(file_path)
     # Load firt (primary sheet)
