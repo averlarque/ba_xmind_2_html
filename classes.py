@@ -44,7 +44,7 @@ class FuncRequirements:
             fu_des_items = ''
             for f in fu_des:
                 fu_des_items += '<li>{}</li>\n'.format(f)
-            result += "<tr>\n<td>N.{0}-FR-{1}</td>\n<td class='FR-{1}'>{2}</td>\n<td><ol class='FR-{1}'>\n{3}</ol></td>\n</tr>\n".format(fe_index, fu_index, 
+            result += "<tr>\n<td>!N.{0}-FR-{1}</td>\n<td class='FR-{1}'>{2}</td>\n<td><ol class='FR-{1}'>\n{3}</ol></td>\n</tr>\n".format(fe_index, fu_index, 
             fu_title, fu_des_items)
 
         return result
