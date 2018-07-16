@@ -96,4 +96,4 @@ def generate_features(name, section_index=0):
         with open(section_folder_path.joinpath(feature_name + '.txt'), 'w') as f:
             f.write(output)
                   
-generate_features("srs")
+generate_features("srs", section_index=1)

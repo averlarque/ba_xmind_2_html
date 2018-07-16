@@ -10,11 +10,11 @@ class UserStory:
 
     def create_layout(self):
         # h2 = '<h2 class="auto-cursor-target">Пользовательские истории</h2> \n'
-        h3 = "\n<h3 id='US-{1}'>N.{0}-US-{1}. {2}</h3>\n".format(self.feature_index, self.story_index, self.title)
+        h3 = "\n<h3 class='US-{1}'>!N.{0}-US-{1}. {2}</h3>\n".format(self.feature_index, self.story_index, self.title)
         table_open = '<table><colgroup><col /><col /></colgroup> \n <tbody> \n'
-        description_row = "<tr> \n <th>Описание</th> \n <td id='US-{1}'>{0}</td></tr> \n".format(self.description, self.story_index)
+        description_row = "<tr> \n <th>Описание</th> \n <td class='US-{1}'>{0}</td></tr> \n".format(self.description, self.story_index)
         criteria = self._iterate_criteria()
-        criteria_row = "<tr>\n<th>Критерии приемки</th>\n<td><ol id='US-{1}'>\n{0}</ol></td></tr>".format(criteria, self.story_index)
+        criteria_row = "<tr>\n<th>Критерии приемки</th>\n<td><ol class='US-{1}'>\n{0}</ol></td></tr>".format(criteria, self.story_index)
         uc_row = '\n<tr>\n <th>UC</th>\n<td></td></tr>'
         fc_row = '\n<tr>\n<th>FR</th>\n<td></td></tr>'
         table_close = '\n</tbody></table>\n'
@@ -44,13 +44,13 @@ class FuncRequirements:
             fu_des_items = ''
             for f in fu_des:
                 fu_des_items += '<li>{}</li>\n'.format(f)
-            result += "<tr>\n<td>N.{0}-FR-{1}</td>\n<td id='FR-{1}'>{2}</td>\n<td><ol id='FR-{1}'>\n{3}</ol></td>\n</tr>\n".format(fe_index, fu_index, 
+            result += "<tr>\n<td>N.{0}-FR-{1}</td>\n<td class='FR-{1}'>{2}</td>\n<td><ol class='FR-{1}'>\n{3}</ol></td>\n</tr>\n".format(fe_index, fu_index, 
             fu_title, fu_des_items)
 
         return result
 
     def create_layout(self):
-        table_open = "\n<table class='wrapped'><colgroup><col /><col /><col /></colgroup>\n<tbody id='func'>\n"
+        table_open = "\n<table class='wrapped'><colgroup><col /><col /><col /></colgroup>\n<tbody class='func'>\n"
         header_row = '<tr>\n<th>ID</th>\n<th>Название</th>\n<th>Описание</th>\n</tr>\n'
         freqs = self._iterate_funcs()
         table_close = '</tbody></table>\n'

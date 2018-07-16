@@ -63,3 +63,4 @@ target/
 output/
 .vscode/
 *.xmind
+config.py
