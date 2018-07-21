@@ -1,8 +1,8 @@
 import xmind
 from pathlib import Path
-from bs4 import BeautifulSoup
 import requests
 from config import *
+from classes import Parser
 
 
 def test_xmind_file(name):
@@ -34,50 +34,7 @@ def parse_html():
             feature.setTitle(l.stem)
             with l.open() as f:
                 content = f.read()
-            soup = BeautifulSoup(content, 'html.parser')
-            # Set a chapter for feature's stories
-            feature_stories = feature.addSubTopic()
-            feature_stories.setTitle('Истории')
-            # Find all h3 tags (we know that only h3 stands for a user story)
-            stories = soup.find_all('h3')
-            for n in range(len(stories)):
-                # Extract particular story title by number
-                story_name = soup.find('h3', class_='US-'+ str(n+1)).string
-                # Set a story title in map
-                story_name_map = feature_stories.addSubTopic()
-                story_name_map.setTitle(story_name)
-                # Extract particular story description by number
-                story_description = soup.find('td', class_='US-'+ str(n+1)).string
-                # Set a story description in map
-                story_description_map = story_name_map.addSubTopic()
-                story_description_map.setTitle(story_description)
-                # Extract user story criteria
-                criteria = soup.find('ol', class_='US-'+ str(n+1)).contents
-                # Iterate through criteria
-                for li in criteria:
-                    if li != '\n':
-                        criteria_map = story_description_map.addSubTopic()
-                        criteria_map.setTitle(li.string)
-            
-            # Set a chapter for feature's functional requirements
-            feature_functionals = feature.addSubTopic()
-            feature_functionals.setTitle('Функциональные')
-            # Find table with functional requirements
-            func_table = soup.find(class_='func')
-            # Get all <tr> within that table
-            trs = func_table.find_all('tr')
-            # Remove header row
-            del trs[0]
-            # Iterate through the number of rows
-            for n in range(len(trs)):
-                f_name = soup.find('td', class_='FR-' + str(n+1)).string
-                f_name_map = feature_functionals.addSubTopic()
-                f_name_map.setTitle(f_name)
-                f_body = soup.find('ol', class_='FR-'+ str(n+1)).contents
-                for li in f_body:
-                    if li != '\n':
-                        f_li_map = f_name_map.addSubTopic()
-                        f_li_map.setTitle(li.string)
+            Parser(feature, content).html_to_xmind()
     xmind.save(w,"test.xmind") 
             
 
@@ -85,57 +42,14 @@ def get_wiki_page(url):
     r = requests.get(url, auth=(wiki_user, wiki_password))
     body = r.text
     w = xmind.load('test.xmind')
-    s1 = w.createSheet()
+    s1 = w.getPrimarySheet()
     r1 = s1.getRootTopic()
-    r1.setTitle('SRS')
+    # r1.setTitle('SRS')
     feature = r1.addSubTopic()
     feature.setTitle('Some Feature')
-    soup = BeautifulSoup(body, 'html.parser')
-    # Set a chapter for feature's stories
-    feature_stories = feature.addSubTopic()
-    feature_stories.setTitle('Истории')
-    # Find all h3 tags (we know that only h3 stands for a user story)
-    stories = soup.find_all('h3')
-    for n in range(len(stories)):
-        # Extract particular story title by number
-        story_name = soup.find('h3', class_='US-'+ str(n+1)).string
-        # Set a story title in map
-        story_name_map = feature_stories.addSubTopic()
-        story_name_map.setTitle(story_name)
-        # Extract particular story description by number
-        story_description = soup.find('td', class_='US-'+ str(n+1)).string
-        # Set a story description in map
-        story_description_map = story_name_map.addSubTopic()
-        story_description_map.setTitle(story_description)
-        # Extract user story criteria
-        criteria = soup.find('ol', class_='US-'+ str(n+1)).contents
-        # Iterate through criteria
-        for li in criteria:
-            if li != '\n':
-                criteria_map = story_description_map.addSubTopic()
-                criteria_map.setTitle(li.string)
-    
-    # Set a chapter for feature's functional requirements
-    feature_functionals = feature.addSubTopic()
-    feature_functionals.setTitle('Функциональные')
-    # Find table with functional requirements
-    func_table = soup.find(class_='func')
-    # Get all <tr> within that table
-    trs = func_table.find_all('tr')
-    # Remove header row
-    del trs[0]
-    # Iterate through the number of rows
-    for n in range(len(trs)):
-        f_name = soup.find('td', class_='FR-' + str(n+1)).string
-        f_name_map = feature_functionals.addSubTopic()
-        f_name_map.setTitle(f_name)
-        f_body = soup.find('ol', class_='FR-'+ str(n+1)).contents
-        for li in f_body:
-            if li != '\n':
-                f_li_map = f_name_map.addSubTopic()
-                f_li_map.setTitle(li.string)
+    Parser(feature, body).html_to_xmind()
     xmind.save(w,"test.xmind") 
 
-#test_xmind_file("srs")
-#parse_html()
-get_wiki_page(test_url)
+# test_xmind_file("srs")
+# parse_html()
+# get_wiki_page(test_url)
